@@ -1,0 +1,30 @@
+{
+  "name": "gas-entry-generator",
+  "version": "1.0.0",
+  "description": "Generator of Google Apps Script entry point function",
+  "main": "index.js",
+  "scripts": {
+    "test": "eslint index.js && nyc tap test/*.test.js",
+    "coverage": "nyc report --reporter=text-lcov | coveralls"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fossamagna/gas-entry-generator.git"
+  },
+  "keywords": [
+    "Google Apps Script"
+  ],
+  "author": "fossamagna <fossamagna2@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "escodegen": "1.7.1",
+    "esprima": "3.1.0",
+    "estraverse": "4.1.1"
+  },
+  "devDependencies": {
+    "coveralls": "2.11.9",
+    "nyc": "9.0.1",
+    "tap": "8.0.0",
+    "eslint": "3.10.2"
+  }
+}
