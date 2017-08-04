@@ -1,4 +1,4 @@
-# gas-entry-generator [![NPM version][npm-image]][npm-url]  [![Build Status][travis-image]][travis-url] [![Dependency Status][daviddm-image]][daviddm-url]  [![Coverage percentage][coveralls-image]][coveralls-url]
+# gas-entry-generator [![NPM version][npm-image]][npm-url]  [![Build Status][travis-image]][travis-url] [![Dependency Status][daviddm-image]][daviddm-url]  [![Coverage percentage][coveralls-image]][coveralls-url] [![Greenkeeper badge](https://badges.greenkeeper.io/fossamagna/gas-entry-generator.svg)](https://greenkeeper.io/)
 
 Top level function generator for Google Apps Script.
 
