@@ -27,8 +27,8 @@ var fs = require('fs');
 var gasEntryGenerator = require('gas-entry-generator');
 
 var fooSource = fs.readFileSync('foo.js', {encoding: 'utf8'});
-var entryFunction = gasEntryGenerator(source);
-// entryFunction is "function foo() {}"
+var entryFunction = gasEntryGenerator(fooSource);
+console.log(entryFunction);  // entryFunction is "function foo() {}"
 ```
 
 Execute to generate function as entry point.
