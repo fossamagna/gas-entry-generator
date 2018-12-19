@@ -17,6 +17,9 @@ $ npm install gas-entry-generator --save-dev
 
 foo.js:
 ```js
+/**
+ * comment for foo function.
+ */
 global.foo = function () {
 };
 ```
@@ -27,8 +30,20 @@ var fs = require('fs');
 var gasEntryGenerator = require('gas-entry-generator');
 
 var fooSource = fs.readFileSync('foo.js', {encoding: 'utf8'});
-var entryFunction = gasEntryGenerator(fooSource);
-console.log(entryFunction);  // entryFunction is "function foo() {}"
+var options = {
+  comment: true
+};
+var entryFunction = gasEntryGenerator(fooSource, options);
+console.log(entryFunction);
+```
+
+Console output:
+```js
+/**
+ * comment for foo function.
+ */
+function foo() {
+}
 ```
 
 Execute to generate function as entry point.
