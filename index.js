@@ -11,7 +11,7 @@ function createBaseAST() {
   return ast;
 }
 
-function createStubFunctionASTNode(functionName, leadingComments) {
+function createStubFunctionASTNode(functionName, leadingComments, params) {
   var node = {
     type: 'FunctionDeclaration',
     id: {
@@ -30,6 +30,9 @@ function createStubFunctionASTNode(functionName, leadingComments) {
   if (leadingComments) {
     node.leadingComments = leadingComments;
   }
+  if (params) {
+    node.params = params;
+  }
   return node;
 }
 
@@ -41,7 +44,7 @@ function _generateStubs(data, options) {
       if (node.type === 'ExpressionStatement'
         && isGlobalAssignmentExpression(node.expression)) {
         var functionName = node.expression.left.property.name;
-        stubs.push(createStubFunctionASTNode(functionName, node.leadingComments));
+        stubs.push(createStubFunctionASTNode(functionName, node.leadingComments, node.expression.right.params));
       }
     }
   });
