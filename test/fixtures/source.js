@@ -10,3 +10,7 @@ global.foo = function () {
 // leading line comment for boo
 global.boo = function (message) {
 };
+function test() {
+};
+var X = 'x';
+global.test = test, global.X = X;

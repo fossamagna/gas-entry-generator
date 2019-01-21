@@ -39,12 +39,21 @@ function createStubFunctionASTNode(functionName, leadingComments, params) {
 function _generateStubs(data, options) {
   var ast = esprima.parseScript(data, { attachComment: options.comment });
   var stubs = [];
+  var functionName;
   estraverse.traverse(ast, {
     leave: function (node) {
       if (node.type === 'ExpressionStatement'
         && isGlobalAssignmentExpression(node.expression)) {
-        var functionName = node.expression.left.property.name;
+        functionName = node.expression.left.property.name;
         stubs.push(createStubFunctionASTNode(functionName, node.leadingComments, node.expression.right.params));
+      } else if (node.type === 'ExpressionStatement' 
+        && node.expression.type === 'SequenceExpression') {
+        node.expression.expressions.forEach(function (expression) {
+          if (isGlobalAssignmentExpression(expression)) {
+            functionName = expression.left.property.name;
+            stubs.push(createStubFunctionASTNode(functionName, node.leadingComments, expression.right.params));
+          }
+        });
       }
     }
   });
