@@ -10,3 +10,7 @@ function foo() {
 // leading line comment for boo
 function boo() {
 }
+function test() {
+}
+function X() {
+}
