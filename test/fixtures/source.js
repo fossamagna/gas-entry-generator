@@ -8,5 +8,5 @@ global.foo = function () {
  * Leading Block Comment for boo.
  */
 // leading line comment for boo
-global.boo = function () {
+global.boo = function (message) {
 };

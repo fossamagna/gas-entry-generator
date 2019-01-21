@@ -8,5 +8,5 @@ function foo() {
  * Leading Block Comment for boo.
  */
 // leading line comment for boo
-function boo() {
+function boo(message) {
 }
