@@ -17,7 +17,7 @@
   "author": "fossamagna <fossamagna2@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "escodegen": "1.10.0",
+    "escodegen": "1.11.1",
     "esprima": "4.0.1",
     "estraverse": "4.2.0"
   },
