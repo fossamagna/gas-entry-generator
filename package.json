@@ -24,7 +24,7 @@
   "devDependencies": {
     "coveralls": "3.0.3",
     "nyc": "14.1.1",
-    "tap": "14.1.0",
+    "tap": "14.1.11",
     "eslint": "5.16.0"
   }
 }
