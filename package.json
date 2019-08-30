@@ -22,7 +22,7 @@
     "estraverse": "4.3.0"
   },
   "devDependencies": {
-    "coveralls": "3.0.5",
+    "coveralls": "3.0.6",
     "nyc": "14.1.1",
     "tap": "14.6.1",
     "eslint": "6.2.2"
