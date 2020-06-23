@@ -10,6 +10,18 @@ global.foo = function () {
 // leading line comment for boo
 global.boo = function (message) {
 };
+/**
+ * Leading Block Comment for bar.
+ */
+// leading line comment for bar
+global.bar = function() {
+},
+/**
+ * Leading Block Comment for baz.
+ */
+// leading line comment for baz
+global.baz = function() {
+};
 function test() {
 };
 var X = 'x';
