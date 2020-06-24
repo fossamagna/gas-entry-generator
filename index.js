@@ -51,7 +51,8 @@ function _generateStubs(data, options) {
         node.expression.expressions.forEach(function (expression) {
           if (isGlobalAssignmentExpression(expression)) {
             functionName = expression.left.property.name;
-            stubs.push(createStubFunctionASTNode(functionName, node.leadingComments, expression.right.params));
+            stubs.push(createStubFunctionASTNode(functionName, expression.leadingComments ?
+              expression.leadingComments : node.leadingComments, expression.right.params));
           }
         });
       }
