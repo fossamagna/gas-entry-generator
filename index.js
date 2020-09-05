@@ -163,10 +163,6 @@ function createGlobalAssignmentASTNode(functionName) {
   return node;
 }
 
-// exports.generateEntryPointFunctions = generateStubs;
-
-// exports.generateGlobalAssignments = generateGlobalAssignments;
-
 exports.generate = function(source, options = { comment: false, autoGlobalExports: false }){
   const ast = esprima.parseScript(source, { attachComment: options.comment });
   const functions = generateStubs(ast, options);
