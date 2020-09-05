@@ -1,4 +1,4 @@
-# gas-entry-generator [![NPM version][npm-image]][npm-url]  [![Build Status][travis-image]][travis-url] [![Dependency Status][daviddm-image]][daviddm-url]  [![Coverage percentage][coveralls-image]][coveralls-url] [![Greenkeeper badge](https://badges.greenkeeper.io/fossamagna/gas-entry-generator.svg)](https://greenkeeper.io/)
+# gas-entry-generator [![NPM version][npm-image]][npm-url]  [![Build Status][travis-image]][travis-url] [![Dependency Status][daviddm-image]][daviddm-url]  [![Coverage percentage][coveralls-image]][coveralls-url]
 
 Top level function generator for Google Apps Script.
 
@@ -26,15 +26,15 @@ global.foo = function () {
 
 generate.js:
 ```js
-var fs = require('fs');
-var gasEntryGenerator = require('gas-entry-generator');
+const fs = require('fs');
+const { generate } = require('gas-entry-generator');
 
-var fooSource = fs.readFileSync('foo.js', {encoding: 'utf8'});
-var options = {
+const fooSource = fs.readFileSync('foo.js', {encoding: 'utf8'});
+const options = {
   comment: true
 };
-var entryFunction = gasEntryGenerator(fooSource, options);
-console.log(entryFunction);
+const output = generate(fooSource, options);
+console.log(output.entryPointFunctions);
 ```
 
 Console output:
@@ -49,6 +49,43 @@ function foo() {
 Execute to generate function as entry point.
 ```sh
 $ node generate.js
+```
+
+## geranate global assignment expressions from exports.*
+
+foo.ts:
+```ts
+/**
+ * comment for foo function.
+ */
+exports.foo = () => 'bar';
+```
+
+generate.js:
+```js
+const fs = require('fs');
+const { generate } = require('gas-entry-generator');
+
+const fooSource = fs.readFileSync('foo.js', {encoding: 'utf8'});
+const options = {
+  comment: true,
+  autoGlobalExports: true // Enable to detect exports.* to generate entry point functions.
+};
+const output = generate(fooSource, options);
+console.log(output.entryPointFunctions);
+console.log('-----');
+console.log(output.globalAssignments);
+```
+
+Console output:
+```
+/**
+ * comment for foo function.
+ */
+function foo() {
+}
+-----
+global.foo = exports.foo;
 ```
 
 [npm-image]: https://badge.fury.io/js/gas-entry-generator.svg
