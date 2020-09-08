@@ -36,22 +36,64 @@ function createStubFunctionASTNode(functionName, leadingComments, params) {
   return node;
 }
 
+class EntryPointFunctions {
+  constructor() {
+    this.stubs = new Map();
+    this.functionNames = [];
+  }
+
+  add(functionName, params, comments) {
+    let index = this.functionNames.indexOf(functionName);
+    if (index === -1) {
+      index = this.functionNames.push(functionName) - 1;
+    }
+    this.stubs.set(index, createStubFunctionASTNode(functionName, comments, params));
+  }
+
+  getEntryPointFunctions() {
+    const entryPointFunctions = [];
+    for (let index = 0; index < this.functionNames.length; index++) {
+      entryPointFunctions.push(this.stubs.get(index));
+    }
+    return entryPointFunctions;
+  }
+}
+
+class GlobalAssignments {
+  constructor() {
+    this.stubs = [];
+    this.functionNames = new Set();
+  }
+
+  add(functionName) {
+    if (this.functionNames.has(functionName)) {
+      return;
+    }
+    this.functionNames.add(functionName);
+    this.stubs.push(createGlobalAssignmentASTNode(functionName));
+  }
+
+  getGlobalAssignments() {
+    return this.stubs;
+  }
+}
+
 function _generateStubs(ast, options) {
   const autoGlobalExports = options.autoGlobalExports;
-  const stubs = [];
+  const entryPointFunctions = new EntryPointFunctions();
   estraverse.traverse(ast, {
     leave: function (node) {
       if (node.type === 'ExpressionStatement'
         && isGlobalAssignmentExpression(node.expression)) {
         const functionName = node.expression.left.property.name;
-        stubs.push(createStubFunctionASTNode(functionName, node.leadingComments, node.expression.right.params));
+        entryPointFunctions.add(functionName, node.expression.right.params, node.leadingComments);
       } else if (node.type === 'ExpressionStatement' 
         && node.expression.type === 'SequenceExpression') {
         node.expression.expressions.forEach(function (expression) {
           if (isGlobalAssignmentExpression(expression)) {
             const functionName = expression.left.property.name;
-            stubs.push(createStubFunctionASTNode(functionName, expression.leadingComments ?
-              expression.leadingComments : node.leadingComments, expression.right.params));
+            entryPointFunctions.add(functionName, expression.right.params, expression.leadingComments ?
+              expression.leadingComments : node.leadingComments);
           }
         });
       }
@@ -59,14 +101,14 @@ function _generateStubs(ast, options) {
         if (node.type === 'ExpressionStatement'
           && isExportsAssignmentExpression(node.expression)) {
             const functionName = node.expression.left.property.name;
-            stubs.push(createStubFunctionASTNode(functionName, node.leadingComments, node.expression.right.params));
+            entryPointFunctions.add(functionName, node.expression.right.params, node.leadingComments);
         } else if (node.type === 'ExpressionStatement' 
           && node.expression.type === 'SequenceExpression') {
           node.expression.expressions.forEach(function (expression) {
             if (isExportsAssignmentExpression(expression)) {
               const functionName = expression.left.property.name;
-              stubs.push(createStubFunctionASTNode(functionName, expression.leadingComments ?
-                expression.leadingComments : node.leadingComments, expression.right.params));
+              entryPointFunctions.add(functionName, expression.right.params, expression.leadingComments ?
+                expression.leadingComments : node.leadingComments);
             }
           });
         }
@@ -74,7 +116,7 @@ function _generateStubs(ast, options) {
     }
   });
 
-  return stubs;
+  return entryPointFunctions.getEntryPointFunctions();
 }
 
 function isGlobalAssignmentExpression(node) {
@@ -96,35 +138,31 @@ function isExportsAssignmentExpression(node) {
 function generateStubs(ast, options) {
   const baseAST = createBaseAST();
   const stubs = _generateStubs(ast, options);
-  stubs.forEach(function (stub) {
-    baseAST.body.push(stub);
-  });
+  baseAST.body.push(...stubs);
   return escodegen.generate(baseAST, { comment: !!options.comment });
 }
 
 function generateGlobalAssignments(ast) {
-  const stubs = [];
+  const globalAssignments = new GlobalAssignments();
   estraverse.traverse(ast, {
     leave: (node) => {
       if (node.type === 'ExpressionStatement'
         && isExportsAssignmentExpression(node.expression)) {
           const functionName = node.expression.left.property.name;
-          stubs.push(createGlobalAssignmentASTNode(functionName));
+          globalAssignments.add(functionName);
       } else if (node.type === 'ExpressionStatement' 
         && node.expression.type === 'SequenceExpression') {
         node.expression.expressions.forEach(function (expression) {
           if (isExportsAssignmentExpression(expression)) {
             const functionName = expression.left.property.name;
-            stubs.push(createGlobalAssignmentASTNode(functionName));
+            globalAssignments.add(functionName);
           }
         });
       }
     }
   });
   const baseAST = createBaseAST();
-  stubs.forEach(function (stub) {
-    baseAST.body.push(stub);
-  });
+  baseAST.body.push(...globalAssignments.getGlobalAssignments());
   return escodegen.generate(baseAST);
 }
 
