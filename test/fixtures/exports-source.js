@@ -3,6 +3,7 @@
  */
 exports.foo = function() {}
 
+exports.boo = void 0;
 /**
  * This is boo.
  */
