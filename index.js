@@ -99,13 +99,13 @@ function _generateStubs(ast, options) {
       }
       if (autoGlobalExports) {
         if (node.type === 'ExpressionStatement'
-          && isExportsAssignmentExpression(node.expression)) {
+          && isNamedExportsAssignmentExpression(node.expression)) {
             const functionName = node.expression.left.property.name;
             entryPointFunctions.add(functionName, node.expression.right.params, node.leadingComments);
         } else if (node.type === 'ExpressionStatement' 
           && node.expression.type === 'SequenceExpression') {
           node.expression.expressions.forEach(function (expression) {
-            if (isExportsAssignmentExpression(expression)) {
+            if (isNamedExportsAssignmentExpression(expression)) {
               const functionName = expression.left.property.name;
               entryPointFunctions.add(functionName, expression.right.params, expression.leadingComments ?
                 expression.leadingComments : node.leadingComments);
@@ -124,15 +124,17 @@ function isGlobalAssignmentExpression(node) {
     && node.operator === '='
     && node.left.type === 'MemberExpression'
     && node.left.object.type === 'Identifier'
-    && node.left.object.name === 'global'
+    && node.left.object.name === 'global';
 }
 
-function isExportsAssignmentExpression(node) {
+function isNamedExportsAssignmentExpression(node) {
   return node.type === 'AssignmentExpression'
     && node.operator === '='
     && node.left.type === 'MemberExpression'
     && node.left.object.type === 'Identifier'
     && node.left.object.name === 'exports'
+    && node.left.property.type === 'Identifier'
+    && node.left.property.name !== 'default';
 }
 
 function generateStubs(ast, options) {
@@ -147,13 +149,13 @@ function generateGlobalAssignments(ast) {
   estraverse.traverse(ast, {
     leave: (node) => {
       if (node.type === 'ExpressionStatement'
-        && isExportsAssignmentExpression(node.expression)) {
+        && isNamedExportsAssignmentExpression(node.expression)) {
           const functionName = node.expression.left.property.name;
           globalAssignments.add(functionName);
       } else if (node.type === 'ExpressionStatement' 
         && node.expression.type === 'SequenceExpression') {
         node.expression.expressions.forEach(function (expression) {
-          if (isExportsAssignmentExpression(expression)) {
+          if (isNamedExportsAssignmentExpression(expression)) {
             const functionName = expression.left.property.name;
             globalAssignments.add(functionName);
           }
