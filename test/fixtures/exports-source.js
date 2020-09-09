@@ -13,3 +13,5 @@ function test() {
 };
 var X = 'x';
 exports.test = test, exports.X = X;
+
+exports.default = function noAssignmentToGlobal() {};
