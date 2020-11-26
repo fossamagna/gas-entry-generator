@@ -20,3 +20,12 @@ test('generate function generate entry functions from global assignments', funct
   t.equal(output.globalAssignments, undefined, 'actual output will match expected');
   t.end();
 });
+
+test('Can parse ES module syntax', function(t) {
+  const source = fs.readFileSync(__dirname + '/fixtures/esm-source.js', {encoding: 'utf8'});
+  const expected = fs.readFileSync(__dirname + '/fixtures/esm-expected.js', {encoding: 'utf8'});
+  const output = generate(source, { comment: true });
+  t.equal(output.entryPointFunctions, expected, 'actual output will match expected');
+  t.equal(output.globalAssignments, undefined, 'actual output will match expected');
+  t.end();
+});

@@ -204,7 +204,7 @@ function createGlobalAssignmentASTNode(functionName) {
 }
 
 exports.generate = function(source, options = { comment: false, autoGlobalExports: false }){
-  const ast = esprima.parseScript(source, { attachComment: options.comment });
+  const ast = esprima.parseModule(source, { attachComment: options.comment });
   const functions = generateStubs(ast, options);
   const globalAssignments = options.autoGlobalExports ? generateGlobalAssignments(ast, options) : undefined;
   return {
