@@ -23,6 +23,6 @@
   "devDependencies": {
     "nyc": "15.1.0",
     "tap": "16.0.0",
-    "eslint": "8.10.0"
+    "eslint": "8.12.0"
   }
 }
