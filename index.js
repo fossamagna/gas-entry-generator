@@ -1,6 +1,6 @@
 'use strict';
 
-const esprima = require('esprima');
+const esprima = require('esprima-next');
 const estraverse = require('estraverse');
 const escodegen = require('escodegen');
 
