@@ -1,6 +1,6 @@
 {
   "name": "gas-entry-generator",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "Generator of Google Apps Script entry point function",
   "main": "index.js",
   "scripts": {
