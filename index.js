@@ -111,6 +111,9 @@ function _generateStubs(ast, options) {
                 expression.leadingComments : node.leadingComments);
             }
           });
+        } else if (node.type === 'ExportNamedDeclaration') {
+          const functionNames = node.specifiers.map(specifier => specifier.local.name);
+          functionNames.forEach((functionName) => entryPointFunctions.add(functionName));
         }
       }
     }
@@ -160,6 +163,9 @@ function generateGlobalAssignments(ast) {
             globalAssignments.add(functionName);
           }
         });
+      } else if (node.type === 'ExportNamedDeclaration') {
+        const functionNames = node.specifiers.map(specifier => specifier.local.name);
+        functionNames.forEach((functionName) => globalAssignments.add(functionName));
       }
     }
   });

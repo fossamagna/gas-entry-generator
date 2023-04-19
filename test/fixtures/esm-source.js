@@ -1,5 +1,5 @@
 import { foo } from './esm-exports';
-
+export { bar } from './esm-exports';
 /**
  * Leading Block Comment for foo.
  */
