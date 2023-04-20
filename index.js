@@ -60,9 +60,10 @@ class EntryPointFunctions {
 }
 
 class GlobalAssignments {
-  constructor() {
+  constructor(exportsIdentifierName = 'exports') {
     this.stubs = [];
     this.functionNames = new Set();
+    this.exportsIdentifierName = exportsIdentifierName;
   }
 
   add(functionName) {
@@ -70,7 +71,7 @@ class GlobalAssignments {
       return;
     }
     this.functionNames.add(functionName);
-    this.stubs.push(createGlobalAssignmentASTNode(functionName));
+    this.stubs.push(createGlobalAssignmentASTNode(functionName, this.exportsIdentifierName));
   }
 
   getGlobalAssignments() {
@@ -147,8 +148,8 @@ function generateStubs(ast, options) {
   return escodegen.generate(baseAST, { comment: !!options.comment });
 }
 
-function generateGlobalAssignments(ast) {
-  const globalAssignments = new GlobalAssignments();
+function generateGlobalAssignments(ast, { exportsIdentifierName = 'exports'}) {
+  const globalAssignments = new GlobalAssignments(exportsIdentifierName);
   estraverse.traverse(ast, {
     leave: (node) => {
       if (node.type === 'ExpressionStatement'
@@ -174,7 +175,7 @@ function generateGlobalAssignments(ast) {
   return escodegen.generate(baseAST);
 }
 
-function createGlobalAssignmentASTNode(functionName) {
+function createGlobalAssignmentASTNode(functionName, exportsIdentifierName) {
   const node = {
     type: "ExpressionStatement",
     expression: {
@@ -197,7 +198,7 @@ function createGlobalAssignmentASTNode(functionName) {
         computed: false,
         object: {
           type: "Identifier",
-          name: "exports"
+          name: exportsIdentifierName // TODO: この名前を外部から指定できるようにしないとダメ。webpackでesnextなら `__webpack_exports__`とする必要がある。
         },
         property: {
           type: "Identifier",
@@ -209,7 +210,7 @@ function createGlobalAssignmentASTNode(functionName) {
   return node;
 }
 
-exports.generate = function(source, options = { comment: false, autoGlobalExports: false }){
+exports.generate = function(source, options = { comment: false, autoGlobalExports: false, exportsIdentifierName: "exports" }){
   const ast = esprima.parseModule(source, { attachComment: options.comment });
   const functions = generateStubs(ast, options);
   const globalAssignments = options.autoGlobalExports ? generateGlobalAssignments(ast, options) : undefined;

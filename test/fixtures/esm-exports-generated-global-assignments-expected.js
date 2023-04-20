@@ -1,1 +1,1 @@
-global.bar = exports.bar;
+global.bar = __webpack_exports__.bar;

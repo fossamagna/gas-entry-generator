@@ -34,7 +34,7 @@ test('generate function generate entry functions from export with autoGlobalExpo
   const source = fs.readFileSync(__dirname + '/fixtures/esm-source.js', {encoding: 'utf8'});
   const expected = fs.readFileSync(__dirname + '/fixtures/esm-expected-autoGlobalExports.js', {encoding: 'utf8'});
   const expectedGlobalAssignments = fs.readFileSync(__dirname + '/fixtures/esm-exports-generated-global-assignments-expected.js', {encoding: 'utf8'});
-  const output = generate(source, { comment: true, autoGlobalExports: true });
+  const output = generate(source, { comment: true, autoGlobalExports: true,  exportsIdentifierName: '__webpack_exports__'});
   t.equal(output.entryPointFunctions, expected, 'actual output will match expected');
   t.equal(output.globalAssignments, expectedGlobalAssignments, 'actual output will match expected');
   t.end();
