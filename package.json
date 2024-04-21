@@ -4,7 +4,8 @@
   "description": "Generator of Google Apps Script entry point function",
   "main": "index.js",
   "scripts": {
-    "test": "eslint index.js && nyc --reporter=lcovonly --reporter=text-summary tap test/*.test.js"
+    "lint": "eslint index.js",
+    "test": "nyc --reporter=lcovonly --reporter=text-summary tap test/*.test.js"
   },
   "repository": {
     "type": "git",
@@ -21,7 +22,9 @@
     "estraverse": "5.3.0"
   },
   "devDependencies": {
-    "eslint": "8.57.0",
+    "@eslint/js": "^9.1.1",
+    "eslint": "9.1.0",
+    "globals": "^15.0.0",
     "nyc": "15.1.0",
     "tap": "16.3.10"
   }
