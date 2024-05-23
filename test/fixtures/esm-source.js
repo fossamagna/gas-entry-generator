@@ -5,3 +5,4 @@ export { bar } from './esm-exports';
  */
 // leading line comment for foo
 global.foo = foo;
+export function boo() { };

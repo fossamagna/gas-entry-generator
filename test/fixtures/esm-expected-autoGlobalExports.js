@@ -6,3 +6,5 @@ function bar() {
 // leading line comment for foo
 function foo() {
 }
+function boo() {
+}

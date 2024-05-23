@@ -63,7 +63,10 @@ class EntryPointFunctions {
 }
 
 class GlobalAssignments {
-  constructor({ exportsIdentifierName = "exports", globalIdentifierName = "global" }) {
+  constructor({
+    exportsIdentifierName = "exports",
+    globalIdentifierName = "global",
+  }) {
     this.stubs = [];
     this.functionNames = new Set();
     this.exportsIdentifierName = exportsIdentifierName;
@@ -76,7 +79,11 @@ class GlobalAssignments {
     }
     this.functionNames.add(functionName);
     this.stubs.push(
-      createGlobalAssignmentASTNode(functionName, this.exportsIdentifierName, this.globalIdentifierName)
+      createGlobalAssignmentASTNode(
+        functionName,
+        this.exportsIdentifierName,
+        this.globalIdentifierName
+      )
     );
   }
 
@@ -151,6 +158,13 @@ function _generateStubs(ast, options) {
           functionNames.forEach((functionName) =>
             entryPointFunctions.add(functionName)
           );
+          // ex: export function foo() {};
+          if (
+            node.declaration &&
+            node.declaration.type === "FunctionDeclaration"
+          ) {
+            entryPointFunctions.add(node.declaration.id.name);
+          }
         }
       }
     },
@@ -209,12 +223,20 @@ function generateGlobalAssignments(ast, options) {
           }
         });
       } else if (node.type === "ExportNamedDeclaration") {
+        // ex: export { foo } from './foo.js';
         const functionNames = node.specifiers.map(
           (specifier) => specifier.local.name
         );
         functionNames.forEach((functionName) =>
           globalAssignments.add(functionName)
         );
+        // ex: export function foo() {};
+        if (
+          node.declaration &&
+          node.declaration.type === "FunctionDeclaration"
+        ) {
+          globalAssignments.add(node.declaration.id.name);
+        }
       }
     },
   });
@@ -223,7 +245,11 @@ function generateGlobalAssignments(ast, options) {
   return escodegen.generate(baseAST);
 }
 
-function createGlobalAssignmentASTNode(functionName, exportsIdentifierName, globalIdentifierName) {
+function createGlobalAssignmentASTNode(
+  functionName,
+  exportsIdentifierName,
+  globalIdentifierName
+) {
   const node = {
     type: "ExpressionStatement",
     expression: {
@@ -265,10 +291,7 @@ const defaultOptions = {
   globalIdentifierName: "global",
 };
 
-exports.generate = function (
-  source,
-  options = defaultOptions
-) {
+exports.generate = function (source, options = defaultOptions) {
   options = Object.assign({}, defaultOptions, options);
   const ast = esprima.parseModule(source, { attachComment: options.comment });
   const functions = generateStubs(ast, options);
