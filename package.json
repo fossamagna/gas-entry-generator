@@ -23,7 +23,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.1.1",
-    "eslint": "9.2.0",
+    "eslint": "9.3.0",
     "globals": "^15.0.0",
     "nyc": "15.1.0",
     "tap": "16.3.10"
