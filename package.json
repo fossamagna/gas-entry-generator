@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "lint": "eslint index.js",
-    "test": "nyc --reporter=lcovonly --reporter=text-summary tap test/*.test.js"
+    "test": "tap --coverage-report=lcov --no-browser --allow-incomplete-coverage test/*.test.js"
   },
   "repository": {
     "type": "git",
@@ -25,7 +25,6 @@
     "@eslint/js": "^9.1.1",
     "eslint": "9.33.0",
     "globals": "^16.0.0",
-    "nyc": "17.1.0",
-    "tap": "16.3.10"
+    "tap": "21.1.0"
   }
 }
