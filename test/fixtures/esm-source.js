@@ -4,5 +4,5 @@ export { bar } from './esm-exports';
  * Leading Block Comment for foo.
  */
 // leading line comment for foo
-global.foo = foo;
+globalThis.foo = foo;
 export function boo() { };

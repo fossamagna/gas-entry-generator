@@ -65,7 +65,7 @@ class EntryPointFunctions {
 class GlobalAssignments {
   constructor({
     exportsIdentifierName = "exports",
-    globalIdentifierName = "global",
+    globalIdentifierName = "globalThis",
   }) {
     this.stubs = [];
     this.functionNames = new Set();
@@ -93,13 +93,13 @@ class GlobalAssignments {
 }
 
 function _generateStubs(ast, options) {
-  const autoGlobalExports = options.autoGlobalExports;
+  const { autoGlobalExports, globalIdentifierName } = options;
   const entryPointFunctions = new EntryPointFunctions();
   estraverse.traverse(ast, {
     leave: function (node) {
       if (
         node.type === "ExpressionStatement" &&
-        isGlobalAssignmentExpression(node.expression)
+        isGlobalAssignmentExpression(node.expression, globalIdentifierName)
       ) {
         const functionName = node.expression.left.property.name;
         entryPointFunctions.add(
@@ -112,7 +112,7 @@ function _generateStubs(ast, options) {
         node.expression.type === "SequenceExpression"
       ) {
         node.expression.expressions.forEach(function (expression) {
-          if (isGlobalAssignmentExpression(expression)) {
+          if (isGlobalAssignmentExpression(expression, globalIdentifierName)) {
             const functionName = expression.left.property.name;
             entryPointFunctions.add(
               functionName,
@@ -173,13 +173,13 @@ function _generateStubs(ast, options) {
   return entryPointFunctions.getEntryPointFunctions();
 }
 
-function isGlobalAssignmentExpression(node) {
+function isGlobalAssignmentExpression(node, globalIdentifierName) {
   return (
     node.type === "AssignmentExpression" &&
     node.operator === "=" &&
     node.left.type === "MemberExpression" &&
     node.left.object.type === "Identifier" &&
-    node.left.object.name === "global"
+    node.left.object.name === globalIdentifierName
   );
 }
 
@@ -288,7 +288,7 @@ const defaultOptions = {
   comment: false,
   autoGlobalExports: false,
   exportsIdentifierName: "exports",
-  globalIdentifierName: "global",
+  globalIdentifierName: "globalThis",
 };
 
 exports.generate = function (source, options = defaultOptions) {
