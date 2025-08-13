@@ -1,4 +1,4 @@
-# gas-entry-generator [![NPM version][npm-image]][npm-url] [![Build Status][github-actions-image]][github-actions-url] [![Dependency Status][daviddm-image]][daviddm-url]  [![Coverage percentage][coveralls-image]][coveralls-url]
+# gas-entry-generator [![NPM version][npm-image]][npm-url] [![Build Status][github-actions-image]][github-actions-url] [![Coverage percentage][coveralls-image]][coveralls-url]
 
 Top level function generator for Google Apps Script.
 
@@ -78,7 +78,7 @@ console.log(output.globalAssignments);
 ```
 
 Console output:
-```
+```js
 /**
  * comment for foo function.
  */
@@ -92,7 +92,5 @@ global.foo = exports.foo;
 [npm-url]: https://npmjs.org/package/gas-entry-generator
 [github-actions-image]: https://github.com/fossamagna/gas-entry-generator/actions/workflows/test.yml/badge.svg?branch=master
 [github-actions-url]: https://github.com/fossamagna/gas-entry-generator/actions/workflows/test.yml?branch=master
-[daviddm-image]: https://david-dm.org/fossamagna/gas-entry-generator.svg
-[daviddm-url]: https://david-dm.org/fossamagna/gas-entry-generator
 [coveralls-image]: https://coveralls.io/repos/github/fossamagna/gas-entry-generator/badge.svg?branch=master
 [coveralls-url]: https://coveralls.io/github/fossamagna/gas-entry-generator?branch=master
