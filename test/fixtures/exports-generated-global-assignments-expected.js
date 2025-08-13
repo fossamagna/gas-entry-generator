@@ -1,4 +1,4 @@
-global.foo = exports.foo;
-global.boo = exports.boo;
-global.test = exports.test;
-global.X = exports.X;
+globalThis.foo = exports.foo;
+globalThis.boo = exports.boo;
+globalThis.test = exports.test;
+globalThis.X = exports.X;

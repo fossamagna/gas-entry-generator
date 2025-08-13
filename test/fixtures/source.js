@@ -2,27 +2,27 @@
  * Leading Block Comment for foo.
  */
 // leading line comment for foo
-global.foo = function () {
+globalThis.foo = function () {
 };
 /**
  * Leading Block Comment for boo.
  */
 // leading line comment for boo
-global.boo = function (message) {
+globalThis.boo = function (message) {
 };
 /**
  * Leading Block Comment for bar.
  */
 // leading line comment for bar
-global.bar = function() {
+globalThis.bar = function() {
 },
 /**
  * Leading Block Comment for baz.
  */
 // leading line comment for baz
-global.baz = function() {
+globalThis.baz = function() {
 };
 function test() {
 };
 var X = 'x';
-global.test = test, global.X = X;
+globalThis.test = test, globalThis.X = X;
